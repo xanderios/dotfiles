@@ -12,9 +12,6 @@
 # Update system packages
 $ sudo apt update && apt upgrade
 
-# Install Homebrew
-$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
 # Setup SSH keys
 $ ssh-keygen
 
@@ -38,7 +35,6 @@ $ git clone https://github.com/xanderios/dotfiles.git ~/.dotfiles
 $ ln -s ~/.dotfiles/.editorconfig ~/.editorconfig
 $ ln -s ~/.dotfiles/.gitconfig ~/.gitconfig
 $ ln -s ~/.dotfiles/.vimrc ~/.vimrc
-$ ln -s ~/.dotfiles/README.md ~/README.md
 $ ln -s ~/.dotfiles/wsl/.bashrc ~/.bashrc
 $ ln -s ~/.dotfiles/wsl/.p10k.zsh ~/.p10k.zsh
 $ ln -s ~/.dotfiles/wsl/.profile ~/.profile
