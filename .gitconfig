@@ -3,6 +3,7 @@
 	email = 53008881+xanderios@users.noreply.github.com
 
 [alias]
+	br = branch
 	ci = commit
 	co = checkout
 	cb = checkout -b
