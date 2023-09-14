@@ -2,7 +2,7 @@
 
 ### 🍎 MacOS
 
-*TODO: add macOS instructions*
+_TODO: add macOS instructions_
 
 ---
 
