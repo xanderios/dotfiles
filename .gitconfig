@@ -19,4 +19,5 @@
 [init]
 	defaultBranch = main
 [core]
-	eol = native
+	autocrlf = true
+	eol = lf
