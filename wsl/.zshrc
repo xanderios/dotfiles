@@ -146,3 +146,13 @@ export NVM_DIR="$HOME/.nvm"
 source <(ng completion script)
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Added by Amplify CLI binary installer
+export PATH="$HOME/.amplify/bin:$PATH"
+
+# bun completions
+[ -s "/home/xanderios/.bun/_bun" ] && source "/home/xanderios/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
