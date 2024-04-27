@@ -1,9 +1,11 @@
 [user]
-	name = xanderios
+	name = Alexandre Rios
 	email = 53008881+xanderios@users.noreply.github.com
+	signingKey = 071F89EC372872F9
 
 [alias]
 	br = branch
+	db = !git branch | grep -v "main" | xargs git branch -D
 	ci = commit
 	co = checkout
 	cb = checkout -b
@@ -19,5 +21,16 @@
 [init]
 	defaultBranch = main
 [core]
-	autocrlf = true
+	autocrlf = false
 	eol = lf
+[commit]
+	gpgsign = true
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+[credential]
+	helper = osxkeychain
+[gpg]
+	program = /opt/homebrew/bin/gpg
