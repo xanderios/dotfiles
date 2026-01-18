@@ -55,7 +55,7 @@
 
 - name: Create symlink for .zprofile
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/macos/wsl/.zprofile"
+    src: "{{ dotfiles_dir }}/macos/.zprofile"
     dest: "{{ ansible_facts.env.HOME }}/.zprofile"
     state: link
     force: yes
