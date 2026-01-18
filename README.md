@@ -1,79 +1,130 @@
 # Dotfiles setup
 
-### 🍎 MacOS
+## Prerequisites
 
+### Install Ansible
 ```bash
-# Clone dotfiles
-$ git clone https://github.com/xanderios/dotfiles.git ~/.dotfiles
+# macOS
+$ brew install ansible
 
-# Make setup script executable
-$ chmod +x ~/.dotfiles/setup.sh ~/.dotfiles/scripts/*.sh
-
-# Run interactive setup (select components to install)
-$ ~/.dotfiles/setup.sh
-
-# Or run in dry-run mode to preview changes
-$ ~/.dotfiles/setup.sh --dry-run
-```
-
-#### What gets configured:
-- **Prerequisites**: Xcode Command Line Tools
-- **Homebrew**: Package manager + shell environment
-- **Development Tools**: git, wget, neovim, zoxide, fzf, nvm
-- **Zsh**: Oh My Zsh + Powerlevel10k theme
-- **Fonts**: Nerd Fonts (FiraCode, JetBrainsMono)
-- **macOS Settings**: Dark mode, Finder preferences, keyboard repeat
-- **Dotfiles**: Symlinks for .zshrc, .gitconfig, .editorconfig, etc.
-
-#### Modular scripts:
-Each component can also be run independently:
-```bash
-$ ~/.dotfiles/scripts/prerequisites.sh
-$ ~/.dotfiles/scripts/devtools.sh
-$ ~/.dotfiles/scripts/zsh.sh
-$ ~/.dotfiles/scripts/fonts.sh
-$ ~/.dotfiles/scripts/macos-settings.sh
-$ ~/.dotfiles/scripts/dotfiles.sh
+# or via pip
+$ pip3 install ansible
 ```
 
 ---
 
-### 🐧 WSL 2
+## 🍎 macOS
+
+### Quick Start
+```bash
+# Clone dotfiles
+$ git clone https://github.com/xanderios/dotfiles.git ~/.dotfiles
+$ cd ~/.dotfiles
+
+# Run the playbook (interactive)
+$ ansible-playbook macos.yml
+
+# Or run specific sections with tags
+$ ansible-playbook macos.yml --tags "homebrew,devtools"
+
+# Check what would change (dry-run)
+$ ansible-playbook macos.yml --check --diff
+```
+
+### Available Tags
+- `prerequisites` - Xcode Command Line Tools
+- `homebrew` - Homebrew installation and setup
+- `devtools` - Development tools (git, wget, neovim, zoxide, fzf, nvm)
+- `zsh` - Zsh, Oh My Zsh, Powerlevel10k
+- `fonts` - Nerd Fonts
+- `macos-settings` - System preferences
+- `dotfiles` - Dotfile symlinks
+- `cleanup` - Homebrew cleanup
+
+### Non-interactive Mode
+Create a variables file to skip prompts:
 
 ```bash
-# Update system packages
-$ sudo apt update && apt upgrade
+$ cat > vars.yml <<EOF
+setup_prerequisites: yes
+setup_homebrew: yes
+setup_devtools: yes
+setup_zsh: yes
+setup_fonts: yes
+setup_macos_settings: yes
+setup_dotfiles: yes
+EOF
 
-# Setup SSH keys
+$ ansible-playbook macos.yml -e @vars.yml
+```
+
+---
+
+## 🐧 WSL 2
+
+### Quick Start
+```bash
+# Clone dotfiles
+$ git clone https://github.com/xanderios/dotfiles.git ~/.dotfiles
+$ cd ~/.dotfiles
+
+# Run the playbook
+$ ansible-playbook wsl.yml --ask-become-pass
+
+# Or check what would change
+$ ansible-playbook wsl.yml --check --diff --ask-become-pass
+```
+
+### Manual Steps
+```bash
+# Generate SSH key
 $ ssh-keygen
-
-# Install ZSH
-$ sudo apt install zsh -y
-
-# Install Oh My Zsh
-$ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-# Install Homebrew
-$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-# Install common brew formulas
-$ brew install bash curl git nvm pnpm php vim wget
-
-# Install keychain for SSH passphrase persistence
-$ sudo apt install keychain -y
 
 # Add passphrase to keychain
 $ ssh-add -K ~/.ssh/ed_25519
-
-# Clone dotfiles
-$ git clone https://github.com/xanderios/dotfiles.git ~/.dotfiles
-
-# Make setup script executable
-$ chmod +x ~/.dotfiles/setup.sh
-
-#	Setup symlinks
-$ ~/.dotfiles/setup.sh
-
-# Create Workspace dir
-$ mkdir ~/Workspace
 ```
+
+---
+
+## Manual Shell Scripts (Legacy)
+
+The old shell script setup is still available in the `scripts/` directory:
+
+```bash
+# Run interactive setup
+$ ./setup.sh
+
+# Or run in dry-run mode
+$ ./setup.sh --dry-run
+```
+
+---
+
+## What Gets Configured
+
+### Development Tools
+- git, wget, neovim, zoxide, fzf, nvm
+- Homebrew (macOS/WSL package manager)
+
+### Shell Environment
+- Zsh with Oh My Zsh
+- Powerlevel10k theme (macOS)
+- Shell completions and integrations
+
+### Fonts
+- FiraCode Nerd Font
+- JetBrainsMono Nerd Font
+
+### macOS Settings
+- Dark mode
+- Show file extensions in Finder
+- Show hidden files
+- Fast keyboard repeat
+
+### Dotfiles
+Symlinks for:
+- `.editorconfig`
+- `.gitconfig`
+- `.zshrc`
+- `.zprofile`
+- `.p10k.zsh`

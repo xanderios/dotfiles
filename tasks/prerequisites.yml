@@ -1,0 +1,21 @@
+---
+- name: Check if Xcode Command Line Tools are installed
+  ansible.builtin.stat:
+    path: /Library/Developer/CommandLineTools/usr/bin/git
+  register: xcode_cli
+
+- name: Install Xcode Command Line Tools
+  ansible.builtin.command: xcode-select --install
+  when: not xcode_cli.stat.exists
+  register: xcode_install
+  failed_when:
+    - xcode_install.rc != 0
+    - "'already installed' not in xcode_install.stderr"
+  changed_when: xcode_install.rc == 0
+
+- name: Wait for Xcode Command Line Tools installation
+  ansible.builtin.pause:
+    prompt: "Please complete the Xcode Command Line Tools installation in the GUI and press Enter to continue"
+  when:
+    - not xcode_cli.stat.exists
+    - xcode_install.changed

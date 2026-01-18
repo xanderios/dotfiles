@@ -1,0 +1,29 @@
+---
+- name: Check if FiraCode Nerd Font is installed
+  ansible.builtin.stat:
+    path: "{{ ansible_facts.env.HOME }}/Library/Fonts/FiraCodeNerdFont-Regular.ttf"
+  register: fira_font_check
+
+- name: Check if JetBrainsMono Nerd Font is installed
+  ansible.builtin.stat:
+    path: "{{ ansible_facts.env.HOME }}/Library/Fonts/JetBrainsMonoNerdFont-Regular.ttf"
+  register: jetbrains_font_check
+
+- name: Install FiraCode Nerd Font
+  community.general.homebrew_cask:
+    name: font-fira-code-nerd-font
+    state: present
+  when: not fira_font_check.stat.exists
+  register: fira_installed
+
+- name: Install JetBrainsMono Nerd Font
+  community.general.homebrew_cask:
+    name: font-jetbrains-mono-nerd-font
+    state: present
+  when: not jetbrains_font_check.stat.exists
+  register: jetbrains_installed
+
+- name: Notify about font installation
+  ansible.builtin.debug:
+    msg: "Fonts installed. Restart Terminal/VS Code to use the new fonts."
+  when: (fira_installed.changed | default(false)) or (jetbrains_installed.changed | default(false))

@@ -1,0 +1,41 @@
+---
+- name: Check if Homebrew is installed
+  ansible.builtin.stat:
+    path: /opt/homebrew/bin/brew
+  register: homebrew_check
+
+- name: Install Homebrew
+  ansible.builtin.shell: |
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  when: not homebrew_check.stat.exists
+  environment:
+    NONINTERACTIVE: "1"
+
+- name: Get Homebrew prefix
+  ansible.builtin.command: /opt/homebrew/bin/brew --prefix
+  register: brew_prefix
+  changed_when: false
+
+- name: Add Homebrew to shell profile (zprofile)
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_facts.env.HOME }}/.zprofile"
+    line: 'eval "$({{ brew_prefix.stdout }}/bin/brew shellenv)"'
+    create: yes
+    mode: '0644'
+
+- name: Add Homebrew to shell profile (profile)
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_facts.env.HOME }}/.profile"
+    line: 'eval "$({{ brew_prefix.stdout }}/bin/brew shellenv)"'
+    create: yes
+    mode: '0644'
+
+- name: Update Homebrew
+  community.general.homebrew:
+    update_homebrew: yes
+    upgrade_all: no
+
+- name: Install gum (interactive CLI)
+  community.general.homebrew:
+    name: gum
+    state: present

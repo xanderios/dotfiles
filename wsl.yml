@@ -1,0 +1,100 @@
+---
+- name: WSL Development Environment Setup
+  hosts: localhost
+  connection: local
+  become: yes
+
+  vars:
+    dotfiles_repo: "https://github.com/xanderios/dotfiles.git"
+    dotfiles_dir: "{{ ansible_env.HOME }}/.dotfiles"
+
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Upgrade all packages
+      ansible.builtin.apt:
+        upgrade: dist
+
+    - name: Install essential packages
+      ansible.builtin.apt:
+        name:
+          - zsh
+          - keychain
+          - curl
+          - git
+          - build-essential
+        state: present
+
+    - name: Check if Oh My Zsh is installed
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.oh-my-zsh"
+      become: no
+      register: oh_my_zsh
+
+    - name: Install Oh My Zsh
+      ansible.builtin.shell: |
+        RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+      become: no
+      when: not oh_my_zsh.stat.exists
+      args:
+        creates: "{{ ansible_env.HOME }}/.oh-my-zsh"
+
+    - name: Check if Homebrew is installed
+      ansible.builtin.stat:
+        path: /home/linuxbrew/.linuxbrew/bin/brew
+      register: homebrew_check
+
+    - name: Install Homebrew
+      ansible.builtin.shell: |
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      become: no
+      when: not homebrew_check.stat.exists
+      environment:
+        NONINTERACTIVE: "1"
+
+    - name: Add Homebrew to .zprofile
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_env.HOME }}/.zprofile"
+        line: 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"'
+        create: yes
+        mode: '0644'
+      become: no
+
+    - name: Install Homebrew packages
+      community.general.homebrew:
+        name:
+          - bash
+          - curl
+          - git
+          - nvm
+          - pnpm
+          - php
+          - vim
+          - wget
+        state: present
+      become: no
+
+    - name: Clone dotfiles repository
+      ansible.builtin.git:
+        repo: "{{ dotfiles_repo }}"
+        dest: "{{ dotfiles_dir }}"
+        version: main
+        update: yes
+      become: no
+
+    - name: Create Workspace directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/Workspace"
+        state: directory
+        mode: '0755'
+      become: no
+
+    - name: Remind about SSH key generation
+      ansible.builtin.debug:
+        msg: |
+          Don't forget to:
+          1. Generate SSH key: ssh-keygen
+          2. Add passphrase to keychain: ssh-add -K ~/.ssh/ed_25519

@@ -1,0 +1,61 @@
+---
+- name: Check if dotfiles repo exists
+  ansible.builtin.stat:
+    path: "{{ dotfiles_dir }}/.git"
+  register: dotfiles_repo
+
+- name: Clone dotfiles repository
+  ansible.builtin.git:
+    repo: "{{ dotfiles_repo }}"
+    dest: "{{ dotfiles_dir }}"
+    version: main
+    update: yes
+  when: not dotfiles_repo.stat.exists
+
+- name: Update dotfiles repository
+  ansible.builtin.git:
+    repo: "{{ dotfiles_repo }}"
+    dest: "{{ dotfiles_dir }}"
+    version: main
+    update: yes
+  when: dotfiles_repo.stat.exists
+
+- name: Create symlink for .editorconfig
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/macos/.editorconfig"
+    dest: "{{ ansible_facts.env.HOME }}/.editorconfig"
+    state: link
+    force: yes
+    backup: yes
+
+- name: Create symlink for .gitconfig
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/macos/.gitconfig"
+    dest: "{{ ansible_facts.env.HOME }}/.gitconfig"
+    state: link
+    force: yes
+    backup: yes
+
+- name: Create symlink for .zshrc
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/macos/wsl/.zshrc"
+    dest: "{{ ansible_facts.env.HOME }}/.zshrc"
+    state: link
+    force: yes
+    backup: yes
+
+- name: Create symlink for .zprofile
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/macos/wsl/.zprofile"
+    dest: "{{ ansible_facts.env.HOME }}/.zprofile"
+    state: link
+    force: yes
+    backup: yes
+
+- name: Create symlink for .p10k.zsh
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/macos/wsl/.p10k.zsh"
+    dest: "{{ ansible_facts.env.HOME }}/.p10k.zsh"
+    state: link
+    force: yes
+    backup: yes

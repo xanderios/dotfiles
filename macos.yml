@@ -1,0 +1,93 @@
+---
+- name: macOS Development Environment Setup
+  hosts: localhost
+  connection: local
+
+  vars_prompt:
+    - name: setup_prerequisites
+      prompt: "Install Xcode Command Line Tools? (yes/no)"
+      default: "yes"
+      private: no
+
+    - name: setup_homebrew
+      prompt: "Setup Homebrew? (yes/no)"
+      default: "yes"
+      private: no
+
+    - name: setup_devtools
+      prompt: "Install development tools? (yes/no)"
+      default: "yes"
+      private: no
+
+    - name: setup_zsh
+      prompt: "Setup Zsh & Oh My Zsh? (yes/no)"
+      default: "yes"
+      private: no
+
+    - name: setup_fonts
+      prompt: "Install Nerd Fonts? (yes/no)"
+      default: "yes"
+      private: no
+
+    - name: setup_macos_settings
+      prompt: "Configure macOS settings? (yes/no)"
+      default: "yes"
+      private: no
+
+    - name: setup_dotfiles
+      prompt: "Setup dotfiles symlinks? (yes/no)"
+      default: "yes"
+      private: no
+
+  vars:
+    dotfiles_repo: "https://github.com/xanderios/dotfiles.git"
+    dotfiles_dir: "{{ ansible_facts.env.HOME }}/.dotfiles"
+
+  pre_tasks:
+    - name: Detect OS
+      fail:
+        msg: "This playbook is for macOS only"
+      when: ansible_facts.os_family != "Darwin"
+
+  tasks:
+    - name: Include prerequisites tasks
+      include_tasks: tasks/prerequisites.yml
+      when: setup_prerequisites | bool
+      tags: [prerequisites]
+
+    - name: Include Homebrew tasks
+      include_tasks: tasks/homebrew.yml
+      when: setup_homebrew | bool
+      tags: [homebrew]
+
+    - name: Include development tools tasks
+      include_tasks: tasks/devtools.yml
+      when: setup_devtools | bool
+      tags: [devtools]
+
+    - name: Include Zsh tasks
+      include_tasks: tasks/zsh.yml
+      when: setup_zsh | bool
+      tags: [zsh]
+
+    - name: Include fonts tasks
+      include_tasks: tasks/fonts.yml
+      when: setup_fonts | bool
+      tags: [fonts]
+
+    - name: Include macOS settings tasks
+      include_tasks: tasks/macos-settings.yml
+      when: setup_macos_settings | bool
+      tags: [macos-settings]
+
+    - name: Include dotfiles tasks
+      include_tasks: tasks/dotfiles.yml
+      when: setup_dotfiles | bool
+      tags: [dotfiles]
+
+  post_tasks:
+    - name: Cleanup Homebrew
+      ansible.builtin.command: brew cleanup
+      when: setup_homebrew | bool
+      tags: [cleanup]
+      changed_when: false

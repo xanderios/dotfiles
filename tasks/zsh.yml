@@ -1,0 +1,29 @@
+---
+- name: Install Powerlevel10k via Homebrew
+  community.general.homebrew:
+    name: powerlevel10k
+    state: present
+
+- name: Check if Oh My Zsh is installed
+  ansible.builtin.stat:
+    path: "{{ ansible_facts.env.HOME }}/.oh-my-zsh"
+  register: oh_my_zsh
+
+- name: Install Oh My Zsh
+  ansible.builtin.shell: |
+    RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  when: not oh_my_zsh.stat.exists
+  args:
+    creates: "{{ ansible_facts.env.HOME }}/.oh-my-zsh"
+
+- name: Get Homebrew prefix for Powerlevel10k
+  ansible.builtin.command: brew --prefix
+  register: brew_prefix
+  changed_when: false
+
+- name: Configure Powerlevel10k in .zshrc
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_facts.env.HOME }}/.zshrc"
+    line: 'source "{{ brew_prefix.stdout }}/opt/powerlevel10k/powerlevel10k.zsh-theme"'
+    create: yes
+    mode: '0644'

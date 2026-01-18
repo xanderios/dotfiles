@@ -1,0 +1,42 @@
+---
+- name: Enable Dark Mode
+  ansible.builtin.shell: |
+    osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to true'
+  changed_when: false
+
+- name: Show all file extensions in Finder
+  community.general.osx_defaults:
+    domain: NSGlobalDomain
+    key: AppleShowAllExtensions
+    type: bool
+    value: true
+    state: present
+
+- name: Show hidden files in Finder
+  community.general.osx_defaults:
+    domain: com.apple.finder
+    key: AppleShowAllFiles
+    type: bool
+    value: true
+    state: present
+
+- name: Set keyboard repeat rate
+  community.general.osx_defaults:
+    domain: NSGlobalDomain
+    key: KeyRepeat
+    type: int
+    value: 3
+    state: present
+
+- name: Set keyboard initial repeat delay
+  community.general.osx_defaults:
+    domain: NSGlobalDomain
+    key: InitialKeyRepeat
+    type: int
+    value: 10
+    state: present
+
+- name: Restart Finder to apply settings
+  ansible.builtin.command: killall Finder
+  failed_when: false
+  changed_when: false
