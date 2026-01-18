@@ -1,36 +1,19 @@
 [user]
-	name = Alexandre Rios
-	email = 53008881+xanderios@users.noreply.github.com
-	signingKey = 071F89EC372872F9
+name = Alexandre Rios
+email = 53008881+xanderios@users.noreply.github.com
+signingkey = E56465D4F4442E2F
 
 [alias]
-	br = branch
-	db = !git branch | grep -v "main" | xargs git branch -D
-	ci = commit
-	co = checkout
-	cb = checkout -b
-	st = status -sb
-	sf = show --name-only
-	lg = log --pretty=format:'%Cred%h%Creset %C(bold)%cr%Creset %Cgreen<%an>%Creset %s' --max-count=100
-	incoming = !(git fetch --quiet && git log --pretty=format:'%C(yellow)%h %C(white)- %C(red)%an %C(white)- %C(cyan)%d%Creset %s %C(white)- %ar%Creset' ..@{u})
-	outgoing = !(git fetch --quiet && git log --pretty=format:'%C(yellow)%h %C(white)- %C(red)%an %C(white)- %C(cyan)%d%Creset %s %C(white)- %ar%Creset' @{u}..)
-	unstage = reset HEAD --
-	undo = checkout --
-	rollback = reset --soft HEAD~1
+lg = log --pretty=format:'%Cred%h%Creset %C(bold)%cr%Creset %Cgreen<%an>%Creset %s' --max-count=100
+incoming = !(git fetch --quiet && git log --pretty=format:'%C(yellow)%h %C(white)- %C(red)%an %C(white)- %C(cyan)%d%Creset %s %C(white)- %ar%Creset' ..@{u})
+outgoing = !(git fetch --quiet && git log --pretty=format:'%C(yellow)%h %C(white)- %C(red)%an %C(white)- %C(cyan)%d%Creset %s %C(white)- %ar%Creset' @{u}..)
+dbf = "!git branch -D $(git branch | grep -v '^\\*' | sed 's/^[ *]*//' | fzf)"
 
 [init]
-	defaultBranch = main
-[core]
-	autocrlf = false
-	eol = lf
+defaultBranch = main
 [commit]
-	gpgsign = true
-[filter "lfs"]
-	required = true
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-[credential]
-	helper = osxkeychain
+gpgsign = true
 [gpg]
 	program = /opt/homebrew/bin/gpg
+[core]
+editor = nvim
