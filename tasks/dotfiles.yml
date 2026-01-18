@@ -45,6 +45,14 @@
     state: link
     force: yes
 
+- name: Create symlink for .oh-my-zsh
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/macos/.oh-my-zsh"
+    dest: "{{ ansible_facts.env.HOME }}/.oh-my-zsh"
+    state: link
+    force: yes
+
+
 - name: Create symlink for .zprofile
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/macos/wsl/.zprofile"
@@ -58,4 +66,3 @@
     dest: "{{ ansible_facts.env.HOME }}/.p10k.zsh"
     state: link
     force: yes
-
