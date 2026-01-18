@@ -23,13 +23,6 @@
     create: yes
     mode: '0644'
 
-- name: Add Homebrew to shell profile (profile)
-  ansible.builtin.lineinfile:
-    path: "{{ ansible_facts.env.HOME }}/.profile"
-    line: 'eval "$({{ brew_prefix.stdout }}/bin/brew shellenv)"'
-    create: yes
-    mode: '0644'
-
 - name: Update Homebrew
   community.general.homebrew:
     update_homebrew: yes
