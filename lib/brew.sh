@@ -119,25 +119,6 @@ brew_cask_install_if_missing() {
   add_item INSTALLED "cask: $cask"
 }
 
-brew_tap_if_missing() {
-  tap="$1"
-  if [ "$BREW_OK" -ne 1 ]; then
-    add_item SKIPPED "brew tap $tap (brew unavailable)"
-    return 0
-  fi
-  if brew tap | grep -Fxq "$tap"; then
-    ok "Tap exists: $tap"
-    return 0
-  fi
-  if [ "$DRY_RUN" -eq 1 ]; then
-    add_item NOTES "Would tap: $tap"
-    return 0
-  fi
-  info "Tapping: $tap"
-  brew tap "$tap"
-  add_item NOTES "Tapped: $tap"
-}
-
 brew_cleanup() {
   if [ "$BREW_OK" -ne 1 ]; then
     return 0

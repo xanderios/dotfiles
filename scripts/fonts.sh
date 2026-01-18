@@ -9,7 +9,6 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 . "$SCRIPT_DIR/../lib/brew.sh"
 
 info "Nerd Fonts installation..."
-brew_tap_if_missing homebrew/cask-fonts
 
 FONT_SELECTIONS="$(ask_multi \
   "FiraCode Nerd Font" \
