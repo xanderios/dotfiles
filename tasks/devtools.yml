@@ -19,14 +19,3 @@
     path: "{{ ansible_facts.env.HOME }}/.nvm"
     state: directory
     mode: '0755'
-
-- name: Configure nvm in .zshrc
-  ansible.builtin.blockinfile:
-    path: "{{ ansible_facts.env.HOME }}/.zshrc"
-    block: |
-      export NVM_DIR="$HOME/.nvm"
-      [ -s "$(brew --prefix)/opt/nvm/nvm.sh" ] && . "$(brew --prefix)/opt/nvm/nvm.sh"
-      [ -s "$(brew --prefix)/opt/nvm/etc/bash_completion.d/nvm" ] && . "$(brew --prefix)/opt/nvm/etc/bash_completion.d/nvm"
-    marker: "# {mark} ANSIBLE MANAGED BLOCK - NVM"
-    create: yes
-    mode: '0644'
