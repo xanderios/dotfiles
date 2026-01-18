@@ -23,15 +23,23 @@ echo "$FONT_SELECTIONS" | grep -Fqx "JetBrainsMono Nerd Font" && WANT_JB=1 || tr
 FONTS_INSTALLED_ANY=0
 
 if [ "$WANT_FIRA" -eq 1 ]; then
-  brew_cask_install_if_missing font-fira-code-nerd-font
-  FONTS_INSTALLED_ANY=1
+  if [ -f "$HOME/Library/Fonts/FiraCodeNerdFont-Regular.ttf" ]; then
+    ok "FiraCode Nerd Font already installed"
+  else
+    brew_cask_install_if_missing font-fira-code-nerd-font
+    FONTS_INSTALLED_ANY=1
+  fi
 else
   add_item SKIPPED "font-fira-code-nerd-font"
 fi
 
 if [ "$WANT_JB" -eq 1 ]; then
-  brew_cask_install_if_missing font-jetbrains-mono-nerd-font
-  FONTS_INSTALLED_ANY=1
+  if [ -f "$HOME/Library/Fonts/JetBrainsMonoNerdFont-Regular.ttf" ]; then
+    ok "JetBrainsMono Nerd Font already installed"
+  else
+    brew_cask_install_if_missing font-jetbrains-mono-nerd-font
+    FONTS_INSTALLED_ANY=1
+  fi
 else
   add_item SKIPPED "font-jetbrains-mono-nerd-font"
 fi
