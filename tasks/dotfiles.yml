@@ -1,24 +1,28 @@
 ---
+- name: Set dotfiles repository URL
+  ansible.builtin.set_fact:
+    dotfiles_repository_url: "{{ dotfiles_repo }}"
+
 - name: Check if dotfiles repo exists
   ansible.builtin.stat:
     path: "{{ dotfiles_dir }}/.git"
-  register: dotfiles_repo
+  register: dotfiles_check
 
 - name: Clone dotfiles repository
   ansible.builtin.git:
-    repo: "{{ dotfiles_repo }}"
+    repo: "{{ dotfiles_repository_url }}"
     dest: "{{ dotfiles_dir }}"
     version: main
     update: yes
-  when: not dotfiles_repo.stat.exists
+  when: not dotfiles_check.stat.exists
 
 - name: Update dotfiles repository
   ansible.builtin.git:
-    repo: "{{ dotfiles_repo }}"
+    repo: "{{ dotfiles_repository_url }}"
     dest: "{{ dotfiles_dir }}"
     version: main
     update: yes
-  when: dotfiles_repo.stat.exists
+  when: dotfiles_check.stat.exists
 
 - name: Create symlink for .editorconfig
   ansible.builtin.file:
