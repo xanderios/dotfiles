@@ -26,7 +26,6 @@
     dest: "{{ ansible_facts.env.HOME }}/.editorconfig"
     state: link
     force: yes
-    backup: yes
 
 - name: Create symlink for .gitconfig
   ansible.builtin.file:
@@ -34,7 +33,6 @@
     dest: "{{ ansible_facts.env.HOME }}/.gitconfig"
     state: link
     force: yes
-    backup: yes
 
 - name: Create symlink for .zshrc
   ansible.builtin.file:
@@ -42,7 +40,6 @@
     dest: "{{ ansible_facts.env.HOME }}/.zshrc"
     state: link
     force: yes
-    backup: yes
 
 - name: Create symlink for .zprofile
   ansible.builtin.file:
@@ -50,7 +47,6 @@
     dest: "{{ ansible_facts.env.HOME }}/.zprofile"
     state: link
     force: yes
-    backup: yes
 
 - name: Create symlink for .p10k.zsh
   ansible.builtin.file:
@@ -58,4 +54,4 @@
     dest: "{{ ansible_facts.env.HOME }}/.p10k.zsh"
     state: link
     force: yes
-    backup: yes
+
