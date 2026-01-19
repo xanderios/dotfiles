@@ -14,12 +14,14 @@
     name: nvm
     state: present
 
-- name: Install Zsh plugins via Homebrew
-  community.general.homebrew:
-    name:
-      - zsh-autosuggestions
-      - zsh-syntax-highlighting
-    state: present
+- name: Install Zsh plugins
+  ansible.builtin.git:
+    repo: "{{ item.repo }}"
+    dest: "{{ lookup('env', 'ZSH_CUSTOM') | default(ansible_facts.env.HOME + '/.oh-my-zsh/custom') }}/plugins/{{ item.name }}"
+    update: yes
+  loop:
+    - { repo: 'https://github.com/zsh-users/zsh-autosuggestions', name: 'zsh-autosuggestions' }
+    - { repo: 'https://github.com/zsh-users/zsh-syntax-highlighting.git', name: 'zsh-syntax-highlighting' }
 
 - name: Create NVM directory
   ansible.builtin.file:
