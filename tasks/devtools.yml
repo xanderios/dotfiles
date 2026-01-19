@@ -17,8 +17,9 @@
 - name: Install Zsh plugins
   ansible.builtin.git:
     repo: "{{ item.repo }}"
-    dest: "{{ lookup('env', 'ZSH_CUSTOM') | default(ansible_facts.env.HOME + '/.oh-my-zsh/custom') }}/plugins/{{ item.name }}"
+    dest: "{{ lookup('env', 'ZSH_CUSTOM') or (ansible_facts.env.HOME + '/.oh-my-zsh/custom') }}/plugins/{{ item.name }}"
     update: yes
+    force: yes
   loop:
     - { repo: 'https://github.com/zsh-users/zsh-autosuggestions', name: 'zsh-autosuggestions' }
     - { repo: 'https://github.com/zsh-users/zsh-syntax-highlighting.git', name: 'zsh-syntax-highlighting' }
