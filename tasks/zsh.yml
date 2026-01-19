@@ -20,10 +20,3 @@
   ansible.builtin.command: brew --prefix
   register: brew_prefix
   changed_when: false
-
-- name: Configure Powerlevel10k in .zshrc
-  ansible.builtin.lineinfile:
-    path: "{{ ansible_facts.env.HOME }}/.zshrc"
-    line: 'source "{{ brew_prefix.stdout }}/opt/powerlevel10k/powerlevel10k.zsh-theme"'
-    create: yes
-    mode: '0644'
