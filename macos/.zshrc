@@ -149,12 +149,5 @@ case ":$PATH:" in
 esac
 # pnpm end
 
-# Load Angular CLI autocompletion.
-source <(ng completion script)
-
 # init zoxide
 eval "$(zoxide init zsh)"
-
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init - zsh)"
