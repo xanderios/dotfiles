@@ -18,8 +18,8 @@ $ pip3 install ansible
 ### Quick Start
 ```bash
 # Clone dotfiles
-$ git clone https://github.com/xanderios/dotfiles.git ~/.dotfiles
-$ cd ~/.dotfiles
+$ git clone https://github.com/xanderios/dotfiles.git ~/dotfiles
+$ cd ~/dotfiles
 
 # Run the playbook (interactive)
 $ ansible-playbook macos.yml
@@ -65,8 +65,8 @@ $ ansible-playbook macos.yml -e @vars.yml
 ### Quick Start
 ```bash
 # Clone dotfiles
-$ git clone https://github.com/xanderios/dotfiles.git ~/.dotfiles
-$ cd ~/.dotfiles
+$ git clone https://github.com/xanderios/dotfiles.git ~/dotfiles
+$ cd ~/dotfiles
 
 # Run the playbook
 $ ansible-playbook wsl.yml --ask-become-pass

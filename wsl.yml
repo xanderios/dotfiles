@@ -6,7 +6,7 @@
 
   vars:
     dotfiles_repo: "https://github.com/xanderios/dotfiles.git"
-    dotfiles_dir: "{{ ansible_env.HOME }}/.dotfiles"
+    dotfiles_dir: "{{ ansible_env.HOME }}/dotfiles"
 
   tasks:
     - name: Update apt cache

@@ -41,7 +41,7 @@
 
   vars:
     dotfiles_repo: "https://github.com/xanderios/dotfiles.git"
-    dotfiles_dir: "{{ ansible_facts.env.HOME }}/.dotfiles"
+    dotfiles_dir: "{{ ansible_facts.env.HOME }}/dotfiles"
 
   pre_tasks:
     - name: Detect OS

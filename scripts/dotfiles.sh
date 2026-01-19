@@ -7,7 +7,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 . "$SCRIPT_DIR/../lib/common.sh"
 
 DOTFILES_REPO_URL="https://github.com/xanderios/dotfiles.git"
-DOTFILES_DIR="$HOME/.dotfiles"
+DOTFILES_DIR="$HOME/dotfiles"
 
 info "Setting up dotfiles..."
 
